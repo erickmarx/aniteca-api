@@ -1,35 +1,54 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { CommentEntity } from 'database/entities/comment.entity';
-import { Repository } from 'typeorm';
+import { Anime, CommentTable } from '@prisma/client';
+import { PrismaService } from 'prisma/prisma.service';
+import { JikanService } from 'src/jikan/jikan.service';
 
 @Injectable()
 export class AnimeService {
   constructor(
-    @InjectRepository(CommentEntity)
-    private commentRepository: Repository<CommentEntity>,
+    private jikanService: JikanService,
+    private prismaService: PrismaService,
   ) {}
 
   async addCommentOnAnimeOrEpisode(
-    userId: string,
+    userId: number,
     text: string,
-    anime: number,
-    episode?: number,
-  ): Promise<CommentEntity> {
-    return await this.commentRepository.save({
-      user: { id: userId },
-      anime: anime,
-      episode: episode ?? null,
-      text: text,
+    animeId: number,
+    episodeId?: number,
+  ): Promise<CommentTable> {
+    return await this.prismaService.commentTable.create({
+      data: {
+        userId: userId,
+        animeId: animeId,
+        episodeId: episodeId,
+        text: text,
+      },
     });
   }
 
   async getAllComments(
-    anime: number,
-    episode?: number,
-  ): Promise<CommentEntity[]> {
-    return await this.commentRepository.find({
-      where: { anime: anime, episode: episode ?? null },
+    animeId: number,
+    episodeId?: number,
+  ): Promise<CommentTable[]> {
+    return await this.prismaService.commentTable.findMany({
+      where: { anime: { id: animeId }, episode: { id: episodeId } },
     });
+  }
+
+  async getAllAnimes(): Promise<Anime[]> {
+    const jikan = await this.jikanService
+      .jikan<{ data: Anime[] }>('anime')
+      .then((animes) =>
+        animes.data.map(({ id, imageUrl, season, title, score }) => ({
+          id,
+          imageUrl,
+          season,
+          title,
+          score,
+        })),
+      );
+
+    // await this.prismaService.anime.create(jikan);
+    return await this.prismaService.anime.findMany();
   }
 }

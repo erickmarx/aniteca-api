@@ -1,18 +1,19 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { UserEntity } from 'database/entities/user.entity';
+import { User } from '@prisma/client';
+import { UserGQL } from './user.interface';
 import { UserService } from './user.service';
 
 @Resolver()
 export class UserResolver {
   constructor(private userService: UserService) {}
 
-  @Query(() => [UserEntity])
-  async getAllUsers(): Promise<UserEntity[]> {
+  @Query(() => [UserGQL])
+  async getAllUsers(): Promise<User[]> {
     return await this.userService.findAllUsers();
   }
 
-  @Mutation(() => UserEntity)
-  async createUser(@Args('id') id: string): Promise<UserEntity> {
+  @Mutation(() => UserGQL)
+  async createUser(@Args('id') id: number): Promise<User> {
     return await this.userService.createUser(id);
   }
 }

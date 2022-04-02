@@ -2,25 +2,25 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type UserEntity {
+type CommentGQL {
   id: ID!
-  comments: [CommentEntity!]!
 }
 
-type CommentEntity {
+type AnimeGQL {
   id: ID!
-  user: UserEntity!
-  text: String!
-  anime: Float!
-  episode: Float
+}
+
+type UserGQL {
+  id: ID!
 }
 
 type Query {
-  getAllUsers: [UserEntity!]!
-  getAllComments(anime: Float!, episode: Float): [CommentEntity!]!
+  getAllUsers: [UserGQL!]!
+  getAllComments(anime: Float!, episode: Float): [CommentGQL!]!
+  getAllAnimes: [AnimeGQL!]!
 }
 
 type Mutation {
-  createUser(id: String!): UserEntity!
-  addCommentOnAnimeOrEpisode(userId: String!, text: String!, anime: Float!, episode: Float): CommentEntity!
+  createUser(id: Float!): UserGQL!
+  addCommentOnAnimeOrEpisode(userId: Float!, text: String!, anime: Float!, episode: Float): CommentGQL!
 }

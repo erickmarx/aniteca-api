@@ -1,0 +1,46 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int            @id
+  comments CommentTable[]
+}
+
+model Anime {
+  id       Int            @id
+  imageUrl String
+  title    String
+  score    Int?
+  season   Int
+  episodes Episode[]
+  Comment  CommentTable[]
+}
+
+model Episode {
+  id       Int            @id
+  title    String
+  duration String
+  anime    Anime?         @relation(fields: [animeId], references: [id])
+  animeId  Int
+  Comment  CommentTable[]
+}
+
+model CommentTable {
+  id        Int     @id @default(autoincrement())
+  user      User?   @relation(fields: [userId], references: [id])
+  userId    Int
+  text      String
+  anime     Anime   @relation(fields: [animeId], references: [id])
+  animeId   Int
+  episode   Episode @relation(fields: [episodeId], references: [id])
+  episodeId Int
+}
