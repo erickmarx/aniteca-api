@@ -1,0 +1,24 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type CommentEntity {
+  id: ID!
+  user: UserEntity!
+  text: String!
+  anime: Float!
+  episode: Float!
+}
+
+type UserEntity {
+  id: ID!
+  comments: [CommentEntity!]!
+}
+
+type Query {
+  users: [UserEntity!]!
+}
+
+type Mutation {
+  createUser(id: String!): UserEntity!
+}
