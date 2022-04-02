@@ -1,9 +1,9 @@
 import { ApolloDriverConfig, ApolloDriver } from '@nestjs/apollo';
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
-import { LoggerMiddleware } from 'src/middlewares/logger.middleware';
+import { AnimeModule } from 'src/anime/anime.module';
 import { UserModule } from 'src/user/user.module';
 import { AppController } from './app.controller';
 
@@ -15,12 +15,9 @@ import { AppController } from './app.controller';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
     UserModule,
+    AnimeModule,
   ],
   controllers: [AppController],
   providers: [],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).exclude('api/health').forRoutes('*');
-  }
-}
+export class AppModule {}

@@ -5,6 +5,13 @@
   "username": "postgres",
   "password": "postgres",
   "database": "aniteca-db",
-  "entities": ["dist/**/*.entity{.ts,.js}"],
-  "synchronize": true
+  "synchronize": true,
+  "entities": ["database/entities/**/*{.js,.ts}"],
+  "migrations": ["dist/database/migrations/**/*{.js,.ts}"],
+  "subscribers": ["dist/database/subscribers/**/*{.js,.ts}"],
+  "cli": {
+    "entitiesDir": "database/entities",
+    "migrationsDir": "database/migrations",
+    "subscribersDir": "database/subscribers"
+  }
 }
