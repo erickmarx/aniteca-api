@@ -4,10 +4,20 @@
 
 type CommentGQL {
   id: ID!
+  userId: Float!
+  text: String!
+  animeId: Float!
+  episodeId: Float!
 }
 
 type AnimeGQL {
+  synopsis: String!
+  duration: String!
+  airedDuration: String!
   id: ID!
+  imageUrl: String!
+  title: String!
+  score: Float!
 }
 
 type UserGQL {
@@ -17,7 +27,7 @@ type UserGQL {
 type Query {
   getAllUsers: [UserGQL!]!
   getAllComments(anime: Float!, episode: Float): [CommentGQL!]!
-  getAllAnimes: [AnimeGQL!]!
+  getAllAnimes(animeId: Float): [AnimeGQL!]!
 }
 
 type Mutation {

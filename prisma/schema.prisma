@@ -16,13 +16,15 @@ model User {
 }
 
 model Anime {
-  id       Int            @id
-  imageUrl String
-  title    String
-  score    Int?
-  season   Int
-  episodes Episode[]
-  Comment  CommentTable[]
+  id            Int            @id
+  imageUrl      String
+  title         String
+  score         Float?
+  synopsis      String?
+  duration      String?
+  airedDuration String?
+  episodes      Episode[]
+  comment       CommentTable[]
 }
 
 model Episode {
@@ -31,7 +33,7 @@ model Episode {
   duration String
   anime    Anime?         @relation(fields: [animeId], references: [id])
   animeId  Int
-  Comment  CommentTable[]
+  comment  CommentTable[]
 }
 
 model CommentTable {

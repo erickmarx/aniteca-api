@@ -12,15 +12,17 @@ export class AnimeResolver {
    ------------------------------------------------------*/
   @Query(() => [CommentGQL])
   async getAllComments(
-    @Args('anime') anime: number,
-    @Args('episode', { nullable: true }) episode?: number,
+    @Args('anime') animeId: number,
+    @Args('episode', { nullable: true }) episodeId?: number,
   ): Promise<CommentTable[]> {
-    return await this.animeService.getAllComments(anime, episode);
+    return await this.animeService.getAllComments(animeId, episodeId);
   }
 
   @Query(() => [AnimeGQL])
-  async getAllAnimes(): Promise<AnimeGQL[]> {
-    return await this.animeService.getAllAnimes();
+  async getAllAnimes(
+    @Args('animeId', { nullable: true }) animeId?: number,
+  ): Promise<AnimeGQL[]> {
+    return await this.animeService.getAllAnimes(animeId);
   }
 
   /*------------------------------------------------------
