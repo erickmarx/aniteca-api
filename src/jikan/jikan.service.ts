@@ -7,6 +7,7 @@ export class JikanService {
 
   async jikan<T>(URI?: string): Promise<T> {
     try {
+      console.log('Connection on:', URI);
       const response = await this.httpService.axiosRef.get<T>(
         `https://api.jikan.moe/v4/${URI}`,
       );
