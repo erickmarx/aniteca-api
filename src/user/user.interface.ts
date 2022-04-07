@@ -5,4 +5,7 @@ import { User } from '@prisma/client';
 export class UserGQL implements User {
   @Field(() => ID)
   id: number;
+
+  @Field()
+  email: string;
 }

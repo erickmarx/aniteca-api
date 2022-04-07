@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Anime, CommentTable, Episode } from '@prisma/client';
+import { Anime, CommentTable, Episode, Favorite } from '@prisma/client';
 
 @ObjectType()
 export class getAllAnimes {
@@ -10,6 +10,12 @@ export class getAllAnimes {
   synopsis?: string;
   duration?: string;
   aired: { string: string };
+  genres: { name: string }[];
+}
+
+export class getAllEpisodesFromAnime {
+  mal_id: number;
+  title: string;
 }
 
 @ObjectType()
@@ -32,6 +38,9 @@ export class CommentGQL implements CommentTable {
 
 @ObjectType()
 export class AnimeGQL implements Anime {
+  @Field(() => ID)
+  id: number;
+
   @Field()
   synopsis: string;
 
@@ -40,9 +49,6 @@ export class AnimeGQL implements Anime {
 
   @Field()
   airedDuration: string;
-
-  @Field(() => ID)
-  id: number;
 
   @Field()
   imageUrl: string;
@@ -53,10 +59,17 @@ export class AnimeGQL implements Anime {
   @Field()
   score: number;
 
-  // @Field(() => [EpisodeGQL])
-  // episodes: Episode[];
+  @Field(() => [String])
+  genres: string[];
+
+  @Field(() => [EpisodeGQL])
+  episodes: EpisodeGQL[];
+
+  @Field(() => [CommentGQL])
+  comment: CommentGQL[];
 }
 
+@ObjectType()
 export class EpisodeGQL implements Episode {
   @Field(() => ID)
   id: number;
@@ -65,7 +78,19 @@ export class EpisodeGQL implements Episode {
   title: string;
 
   @Field()
-  duration: string;
+  number: number;
+
+  @Field()
+  animeId: number;
+}
+
+@ObjectType()
+export class FavoriteGQL implements Favorite {
+  @Field(() => ID)
+  id: number;
+
+  @Field()
+  userId: number;
 
   @Field()
   animeId: number;

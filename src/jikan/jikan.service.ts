@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class JikanService {
@@ -20,14 +20,8 @@ export class JikanService {
         error.isAxiosError &&
         error.response.status !== HttpStatus.INTERNAL_SERVER_ERROR
       ) {
-        return { ...error.response.data, host: 'Jikan' };
+        return undefined;
       }
-      console.error(error);
-
-      throw new HttpException(
-        'Failed to connect to jikan service',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
     }
   }
 }

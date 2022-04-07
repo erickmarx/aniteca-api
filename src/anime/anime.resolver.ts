@@ -1,5 +1,4 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CommentTable } from '@prisma/client';
 import { AnimeGQL, CommentGQL } from './anime.interface';
 import { AnimeService } from './anime.service';
 
@@ -10,19 +9,15 @@ export class AnimeResolver {
   /*------------------------------------------------------
                             Query
    ------------------------------------------------------*/
-  @Query(() => [CommentGQL])
-  async getAllComments(
-    @Args('anime') animeId: number,
-    @Args('episode', { nullable: true }) episodeId?: number,
-  ): Promise<CommentTable[]> {
-    return await this.animeService.getAllComments(animeId, episodeId);
-  }
 
   @Query(() => [AnimeGQL])
-  async getAllAnimes(
+  async animes(
     @Args('animeId', { nullable: true }) animeId?: number,
+    @Args('title', { nullable: true }) title?: string,
+    @Args('genres', { nullable: true, type: () => [String] }) genres?: string[],
+    @Args('limit', { nullable: true }) limit?: number,
   ): Promise<AnimeGQL[]> {
-    return await this.animeService.getAllAnimes(animeId);
+    return await this.animeService.animes(animeId, title, genres, limit);
   }
 
   /*------------------------------------------------------
@@ -30,13 +25,13 @@ export class AnimeResolver {
    ------------------------------------------------------*/
   @Mutation(() => CommentGQL)
   async addCommentOnAnimeOrEpisode(
-    @Args('userId') userId: number,
+    @Args('email') email: string,
     @Args('text') text: string,
     @Args('anime') anime: number,
     @Args('episode', { nullable: true }) episode?: number,
-  ): Promise<CommentTable> {
+  ): Promise<CommentGQL> {
     return await this.animeService.addCommentOnAnimeOrEpisode(
-      userId,
+      email,
       text,
       anime,
       episode,

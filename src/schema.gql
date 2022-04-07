@@ -11,26 +11,44 @@ type CommentGQL {
 }
 
 type AnimeGQL {
+  id: ID!
   synopsis: String!
   duration: String!
   airedDuration: String!
-  id: ID!
   imageUrl: String!
   title: String!
   score: Float!
+  genres: [String!]!
+  episodes: [EpisodeGQL!]!
+  comment: [CommentGQL!]!
+}
+
+type EpisodeGQL {
+  id: ID!
+  title: String!
+  number: Float!
+  animeId: Float!
+}
+
+type FavoriteGQL {
+  id: ID!
+  userId: Float!
+  animeId: Float!
 }
 
 type UserGQL {
   id: ID!
+  email: String!
 }
 
 type Query {
-  getAllUsers: [UserGQL!]!
-  getAllComments(anime: Float!, episode: Float): [CommentGQL!]!
-  getAllAnimes(animeId: Float): [AnimeGQL!]!
+  getUser(email: String!): UserGQL!
+  animes(animeId: Float, title: String, genres: [String!], limit: Float): [AnimeGQL!]!
+  fillDatabase(anime: Boolean = false, episode: Boolean = false): String!
 }
 
 type Mutation {
-  createUser(id: Float!): UserGQL!
-  addCommentOnAnimeOrEpisode(userId: Float!, text: String!, anime: Float!, episode: Float): CommentGQL!
+  createUser(email: String!): UserGQL!
+  addFavoriteAnime(email: String!, animeId: Float!): FavoriteGQL!
+  addCommentOnAnimeOrEpisode(email: String!, text: String!, anime: Float!, episode: Float): CommentGQL!
 }

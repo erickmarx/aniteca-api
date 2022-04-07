@@ -11,8 +11,10 @@ datasource db {
 }
 
 model User {
-  id       Int            @id
+  id       Int            @id @default(autoincrement())
+  email    String         @unique
   comments CommentTable[]
+  Favorite Favorite[]
 }
 
 model Anime {
@@ -23,17 +25,19 @@ model Anime {
   synopsis      String?
   duration      String?
   airedDuration String?
+  genres        String[]
   episodes      Episode[]
   comment       CommentTable[]
+  Favorite      Favorite[]
 }
 
 model Episode {
-  id       Int            @id
-  title    String
-  duration String
-  anime    Anime?         @relation(fields: [animeId], references: [id])
-  animeId  Int
-  comment  CommentTable[]
+  id      Int            @id @default(autoincrement())
+  number  Int
+  title   String
+  anime   Anime?         @relation(fields: [animeId], references: [id])
+  animeId Int
+  comment CommentTable[]
 }
 
 model CommentTable {
@@ -45,4 +49,12 @@ model CommentTable {
   animeId   Int
   episode   Episode @relation(fields: [episodeId], references: [id])
   episodeId Int
+}
+
+model Favorite {
+  id      Int   @id @default(autoincrement())
+  user    User? @relation(fields: [userId], references: [id])
+  userId  Int
+  anime   Anime @relation(fields: [animeId], references: [id])
+  animeId Int
 }
